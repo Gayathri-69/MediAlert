@@ -1,1 +1,1 @@
-# MediAlert-
+# MediAlert
