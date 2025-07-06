@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Profiles</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N"
+        crossorigin="anonymous"></script>
+
+    <style>
+        section {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        #home {
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 1)),
+                url("indexbg.jpg");
+            background-size: cover;
+            background-position: center;
+        }
+
+        .h1 {
+            font-family: cursive;
+            color: rgb(255, 255, 255);
+            font-size: 5.5vw;
+            text-align: center;
+        }
+
+        .h2 {
+            font-family: cursive;
+            color: rgb(255, 255, 255);
+            font-size: 2.0vw;
+            text-align: center;
+        }
+
+        body {
+            overflow-x: hidden;
+        }
+
+        .topnav {
+            overflow: hidden;
+            background-color: #333;
+            position: relative;
+        }
+
+        .topnav #myLinks {
+            display: none;
+        }
+
+        .topnav a {
+            color: white;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+            display: block;
+        }
+
+        .topnav a.icon {
+            background: rgb(3, 168, 12);
+            display: block;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+        .topnav a:hover {
+            background-color: #ddd;
+            color: rgb(0, 0, 0);
+        }
+
+        .active {
+            background-color: rgba(0, 0, 0, 0.2);
+            color: white;
+        }
+
+        .delete-profile {
+            position: absolute;
+            top: 0.1px;
+            right: 10px;
+            cursor: pointer;
+            color: red;
+        }
+    </style>
+
+    <title>Profiles</title>
+</head>
+
+<body>
+    <audio id="alarmSound">
+        <source src="alarm.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <section id="home">
+        <div class="screen-container">
+
+            <!-- Top Navigation Menu -->
+            <div class="topnav">
+                <a href="#home" class="active">Patient profiles</a>
+                <div id="myLinks">
+                    <a href="#myprofile">My profile</a>
+                    <a href="Login.html">logout</a>
+                    <a href="#about">About</a>
+                </div>
+                <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+
+            <!-- End smartphone / tablet look -->
+        </div>
+
+        <br><br><br><br><br>
+        <div id="profileContainer" class="row">
+            <!-- Profiles will be dynamically added here -->
+        </div>
+
+    </section>
+
+    <!-- Modal -->
+    <div class="modal fade" id="alarmModal" tabindex="-1" aria-labelledby="alarmModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="alarmModalLabel">Tablet Reminder</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Patient details will be inserted here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const temp_data = {
+            "hours": 15,
+            "mins": 3
+        };
+
+        let time_out = setInterval(() => {
+            const date = new Date();
+            const hour = date.getHours();
+            const min = date.getMinutes();
+            if (hour == temp_data.hours && min == temp_data.mins) {
+                alert(`
+                    ASAP !!!  Medicine to be given to the Patient
+                    NAME : anjali;
+                    TABLET NAME: dolo 650;
+                    DOSAGE: 1
+                `);
+                clearInterval(time_out)
+            }
+        }, 1000);
+
+        function myFunction() {
+            var x = document.getElementById("myLinks");
+            if (x.style.display === "block") {
+                x.style.display = "none";
+            } else {
+                x.style.display = "block";
+            }
+        }
+
+        function preventback() {
+            window.history.forward();
+        }
+        setTimeout("preventback()", 0);
+        window.onunload = function () { null; }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const profileContainer = document.getElementById("profileContainer");
+            const profiles = JSON.parse(localStorage.getItem("patientDetails"));
+
+            const alarmSound = new Audio("alarm.mp3"); // Replace with the path to your alarm sound file
+
+            let index = 0;
+            for (const profile of profiles) {
+                const profileCard = document.createElement("div");
+                profileCard.className = "col-lg-3 mb-4 position-relative";
+                profileCard.innerHTML = `
+                    <div class="card" style="width: 18rem;">
+                        <span class="delete-profile" onclick="deleteProfile(${index})">&times;</span>
+                        <img class="card-img-top" src="person.jpg" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">${profile.patientName}</h5>
+                            <p class="card-text">Age: ${profile.age}</p>
+                            <p class="card-text">Room No: ${profile.roomNo || 'Not available'}</p>
+                            <a href="details.html?id=${index}" class="btn btn-primary" onclick="setSelectedProfileIndex(${index})">View details</a>
+                        </div>
+                    </div>
+                `;
+                profileContainer.appendChild(profileCard);
+
+                console.log(profile);
+
+                const tabletDetails = profile.tablets;
+
+                console.log(tabletDetails);
+
+                const alarmTimeString = `${profile.date}T${tabletDetails[0].time}:00`; // Combine date and time
+
+                console.log(alarmTimeString);
+                const alarmTime = new Date(alarmTimeString);
+                const currentTime = new Date();
+
+                console.log(alarmTime, currentTime);
+
+                // Compare only the hours and minutes part of the time
+                const alarmTimeHM = `${alarmTime.getHours().toString().padStart(2, '0')}:${alarmTime.getMinutes().toString().padStart(2, '0')}`;
+                const currentTimeHM = `${currentTime.getHours().toString().padStart(2, '0')}:${currentTime.getMinutes().toString().padStart(2, '0')}`;
+
+                if (alarmTimeHM === currentTimeHM) {
+                    setTimeout(() => {
+                        alarmSound.play();
+                        showModal(profile, tabletDetails[0]);
+                    }, alarmTime - currentTime);
+                }
+                index += 1;
+            }
+        });
+
+        function setSelectedProfileIndex(index) {
+            localStorage.setItem("selectedProfileIndex", index);
+        }
+
+        function deleteProfile(index) {
+            const profiles = JSON.parse(localStorage.getItem("patientDetails"));
+
+            profiles.splice(index, 1);
+            localStorage.setItem("patientDetails", JSON.stringify(profiles));
+
+            location.reload(); // Refresh the page to reflect the changes
+        }
+
+        function showModal(profile, tablet) {
+            const modalBody = document.querySelector("#alarmModal .modal-body");
+            modalBody.innerHTML = `
+                <p><strong>Patient Name:</strong> ${profile.patientName}</p>
+                <p><strong>Age:</strong> ${profile.age}</p>
+                <p><strong>Gender:</strong> ${profile.gender}</p>
+                <p><strong>Disease:</strong> ${profile.disease}</p>
+                <p><strong>Tablet:</strong> ${tablet.tabletName}</p>
+                <p><strong>Dosage:</strong> ${tablet.dosage}</p>
+                <p><strong>Time:</strong> ${tablet.time}</p>
+            `;
+            const alarmModal = new bootstrap.Modal(document.getElementById('alarmModal'));
+            alarmModal.show();
+        }
+
+        function setTimer() {
+            const dateInput = document.getElementById('dateInput').value;
+            const timeInput = document.getElementById('timeInput').value;
+
+            if (!dateInput || !timeInput) {
+                alert('Please select both date and time.');
+                return;
+            }
+
+            // Combine date and time inputs into a single Date object
+            const targetDateTime = new Date(`${dateInput}T${timeInput}`);
+            const currentDate = new Date();
+
+            // Calculate the delay in milliseconds
+            const delay = targetDateTime.getTime() - currentDate.getTime();
+
+            if (delay > 0) {
+                setTimeout(() => {
+                    alert('Tablet Name: DOLO 650 \n Patient Name: Manga \n ASAP !!!  Medicine to be given to the Patient');
+                }, delay);
+            } else {
+                alert('The specified time is in the past. Please enter a future time.');
+            }
+        }
+
+        function checkMedications() {
+            const currentTime = new Date().toTimeString().substr(0, 5);
+            const profiles = JSON.parse(localStorage.getItem("patientDetails"))
+            profiles.forEach(patient => {
+                patient.tablets.forEach(tablet => {
+                    alarmInput = tablet.time;
+                    const alarmDate = new Date();
+                    const [hours, minutes] = alarmInput.split(':');
+                    alarmDate.setHours(hours);
+                    alarmDate.setMinutes(minutes);
+                    alarmDate.setSeconds(0);
+
+                    const now = new Date();
+                    const timeToAlarm = alarmDate.getTime() - now.getTime();
+
+                    if (timeToAlarm > 0) {
+                        setTimeout(() => {
+                            alert(`Tablet Name: ${tablet.tabletName} \n Patient Name: ${patient.patientName} \n ASAP !!! Medicine to be given to the Patient`);
+                        }, timeToAlarm);
+                    }
+                });
+            });
+        }
+
+        // Check medications every minute
+        setInterval(checkMedications, 60000);
+        checkMedications();
+    </script>
+</body>
+
+</html>

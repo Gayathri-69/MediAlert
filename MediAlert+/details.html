@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .profile-photo {
+            display: flex;
+            align-items: center;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 20px;
+        }
+        .profile-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .profile-info {
+            display: flex;
+            align-items: center;
+        }
+        .profile-details {
+            margin-left: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        #home {
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 1)),
+                url("indexbg.jpg");
+            background-size: cover;
+            background-position: center;
+            flex-direction: column;
+        }
+        .edit-roomno {
+            display: none;
+        }
+        .delete-profile {
+            position: absolute;
+            top: 0.1px;
+            right: 10px;
+            cursor: pointer;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <section id="home">
+        <div class="container">
+            <button onclick="window.location.href='profile.html'">Back</button>
+            <div class="profile-info">
+                <div class="profile-photo">
+                    <img src="person.jpg" alt="Profile Photo">
+                </div>
+                <!-- <button onclick=setAlarm()>set</button> -->
+                <div class="profile-details">
+                    <p id="patientName">Name: Not available</p>
+                    <p id="age">Age: Not available</p>
+                    <p id="gender">Gender: Not available</p>
+                    <p id="disease">Disease: Not available</p>
+                    <p id="roomNoDisplay">Room No: <span id="roomNoValue">Not available</span> <button onclick="toggleEditRoomNo()">Edit</button></p>
+                    <p id="roomNoEdit" class="edit-roomno">Room No: <input type="text" id="roomNoInput"> <button onclick="saveRoomNo()">Save</button></p>
+                </div>
+            </div>
+            <table>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td>BP</td>
+                    <td id="bp">120/80 mmHg</td>
+                </tr>
+                <tr>
+                    <td>Heart Rate</td>
+                    <td id="heartRate">70 bpm</td>
+                </tr>
+                <tr>
+                    <td>Oxygen</td>
+                    <td id="oxygen">98%</td>
+                </tr>
+                <tr>
+                    <td>Spo2 Level</td>
+                    <td id="spo2">95%</td>
+                </tr>
+            </table>
+    
+            <div class="container">
+                <table id="tabletDetails">
+                    <thead>
+                        <tr>
+                            <th>Tablet</th>
+                            <th id="alarmTime">Time</th>
+                            <th>Dosage</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Tablet details will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+    <audio id="alarmSound">
+        <source src="alarm.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+    </audio>
+    <script>
+        function complete(button) {
+            // Change the button's parent node's inner HTML to "Given"
+            const row = button.closest('tr');
+            const statusCell = row.querySelector('td:last-child');
+            statusCell.innerHTML = "Given";
+
+            // Update the status in localStorage
+            const tabletIndex = button.getAttribute('data-index');
+            const profiles = JSON.parse(localStorage.getItem("profiles")) || [];
+            const selectedProfileIndex = localStorage.getItem("selectedProfileIndex");
+
+            if (selectedProfileIndex !== null && profiles[selectedProfileIndex]) {
+                profiles[selectedProfileIndex].tablets[tabletIndex].status = "Given";
+                localStorage.setItem("profiles", JSON.stringify(profiles));
+            }
+        }
+
+        function toggleEditRoomNo() {
+            document.getElementById('roomNoDisplay').style.display = 'none';
+            document.getElementById('roomNoEdit').style.display = 'block';
+            const roomNoValue = document.getElementById('roomNoValue').innerText.trim();
+            document.getElementById('roomNoInput').value = roomNoValue !== "Not available" ? roomNoValue : "";
+        }
+
+        function saveRoomNo() {
+            const newRoomNo = document.getElementById('roomNoInput').value.trim();
+            document.getElementById('roomNoValue').innerText = newRoomNo ? newRoomNo : "Not available";
+            document.getElementById('roomNoDisplay').style.display = 'block';
+            document.getElementById('roomNoEdit').style.display = 'none';
+
+            // Save the new room number to the profile in localStorage
+            const profiles = JSON.parse(localStorage.getItem("profiles")) || [];
+            const selectedProfileIndex = localStorage.getItem("selectedProfileIndex");
+            if (selectedProfileIndex !== null && profiles[selectedProfileIndex]) {
+                profiles[selectedProfileIndex].roomNo = newRoomNo;
+                localStorage.setItem("profiles", JSON.stringify(profiles));
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const profiles = JSON.parse(localStorage.getItem("patientDetails"))
+            
+    // Get the current URL
+            const url = window.location.href;
+
+            // Create a URL object
+            const urlObj = new URL(url);
+
+            // Use URLSearchParams to extract the 'id' parameter
+            const selectedProfileIndex = urlObj.searchParams.get('id');
+          
+
+
+            if (selectedProfileIndex !== null && profiles[selectedProfileIndex]) {
+                const profile = profiles[selectedProfileIndex];
+
+                document.getElementById("patientName").innerText = `Name: ${profile.patientName}`;
+                document.getElementById("age").innerText = `Age: ${profile.age}`;
+                document.getElementById("gender").innerText = `Gender: ${profile.gender}`;
+                document.getElementById("disease").innerText = `Disease: ${profile.disease}`;
+                document.getElementById("roomNoValue").innerText = profile.roomNo || "Not available"; // Set Room No initially
+
+                const tabletDetails = profile.tablets || [];
+                const tabletTableBody = document.getElementById("tabletDetails").getElementsByTagName('tbody')[0];
+
+                tabletDetails.forEach((tablet, index) => {
+                    let newRow = tabletTableBody.insertRow();
+                    newRow.innerHTML = `
+                        <td>${tablet.tabletName}</td>
+                        <td>${tablet.time}</td>
+                        <td>${tablet.dosage}</td>
+                        <td id="t${index}">${tablet.status || "Not Given"}</td>
+                    `;
+                });
+            }
+        });
+        
+        let alarmTime = null;
+        let alarmTimeout = null;
+
+        function setAlarm() {
+            const alarmInput = document.getElementById('alarmTime').value;
+            if (!alarmInput) {
+                alert('Please select a time to set the alarm.');
+                return;
+            }
+
+            const alarmDate = new Date();
+            const [hours, minutes] = alarmInput.split(':');
+            alarmDate.setHours(hours);
+            alarmDate.setMinutes(minutes);
+            alarmDate.setSeconds(0);
+
+            const now = new Date();
+            const timeToAlarm = alarmDate.getTime() - now.getTime();
+
+            if (timeToAlarm < 0) {
+                alert('The selected time has already passed.');
+                return;
+            }
+
+            if (alarmTimeout) {
+                clearTimeout(alarmTimeout);
+            }
+
+            alarmTimeout = setTimeout(triggerAlarm, timeToAlarm);
+            document.getElementById('message').textContent = `Alarm set for ${alarmInput}`;
+        }
+
+        function triggerAlarm() {
+            const alarmSound = document.getElementById('alarmSound');
+            alarmSound.play();
+
+            const stopAlarm = confirm('Wake up! Time to get up!\nClick OK to stop the alarm.');
+
+            if (stopAlarm) {
+                alarmSound.pause();
+                alarmSound.currentTime = 0; // Reset the audio to the beginning
+                clearTimeout(alarmTimeout);
+                document.getElementById('message').textContent = '';
+            } else {
+                // If user cancels, snooze or whatever other action you might want
+                // For now, we'll reset the alarm message
+                document.getElementById('message').textContent = 'Alarm stopped.';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N"
+        crossorigin="anonymous"></script>
+
+    <title>Doctor's Portal</title>
+    <style>
+        section {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: url("indexbg.jpg") no-repeat center center;
+            background-size: cover;
+        }
+
+        form {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px; /* Adjust as needed */
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"], input[type="number"], input[type="date"], input[type="time"], select, textarea {
+            width: calc(100% - 22px); /* Adjust the width */
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"], .btn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover, .btn:hover {
+            background-color: #45a049;
+        }
+
+        .topnav {
+            overflow: hidden;
+            background-color: #333;
+            width: 100%;
+            position: relative;
+        }
+        .topnav #myLinks {
+            display: none;
+        }
+
+        .topnav a {
+            color: white;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+            display: block;
+        }
+
+        .topnav a.icon {
+            background: rgb(3, 168, 12);
+            display: block;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+        .topnav a:hover {
+            background-color: #ddd;
+            color: rgb(0, 0, 0);
+        }
+
+        .active {
+            background-color: rgba(0, 0, 0, 0.2);
+            color: white;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .deleteBtn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .deleteBtn:hover {
+            background-color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+    <section id="home">
+        <div class="topnav">
+            <a href="#home" class="active">Doctor profiles</a>
+            <div id="myLinks">
+                <a href="#myprofile">My profile</a>
+                <a href="Login.html">Logout</a>
+                <a href="#about">About</a>
+            </div>
+            <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+                <i class="fa fa-bars"></i>
+            </a>
+        </div>
+        <h2>Patient Details</h2>
+        <form id="patientForm">
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required>
+
+            <label for="patientName">Patient Name:</label>
+            <input type="text" id="patientName" name="patientName" required>
+
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" required>
+
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender" required>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+            </select>
+
+            <label for="disease">Disease:</label>
+            <input type="text" id="disease" name="disease" required>
+
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" rows="4" required></textarea>
+
+            <label for="admitted">Admitted:</label>
+            <select id="admitted" name="admitted" required>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+
+            <label for="tabletName">Tablet Name:</label>
+            <input type="text" id="tabletName" name="tabletName">
+
+            <label for="time">Time:</label>
+            <input type="time" id="time" name="time">
+
+            <label for="dosage">Dosage:</label>
+            <input type="text" id="dosage" name="dosage">
+
+
+            <label for="dosage">Schedule:</label>
+            <input type="checkbox" name="Breakfast" id="1">Breakfast
+            <input type="checkbox" name="Breakfast" id="2">Lunch
+            <input type="checkbox" name="Breakfast" id="3">Dinner
+            <br><br>
+
+            <button type="button" class="btn" onclick="addTablet()">Add Tablet</button><br><br>
+
+            <input type="submit" value="Submit">
+
+            <button type="button" class="btn" onclick="window.location.reload(true)">New Patient</button>
+
+            
+
+        </form>
+
+        <h3>Tablet Details</h3>
+        <table id="tabletDisplay">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Tablet Name</th>
+                    <th>Time</th>
+                    <th>Dosage</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Tablet details will be added dynamically here -->
+            </tbody>
+        </table>
+    </section>
+
+    <script>
+        // Check if there are any existing patient details in local storage
+        if (!localStorage.getItem("patientDetails")) {
+            localStorage.setItem("patientDetails", JSON.stringify([]));
+        }
+
+        function myFunction() {
+            var x = document.getElementById("myLinks");
+            if (x.style.display === "block") {
+                x.style.display = "none";
+            } else {
+                x.style.display = "block";
+            }
+        }
+
+        function preventback() {
+            window.history.forward();
+        }
+        setTimeout("preventback()");
+        window.onunload = function () { null; }
+
+        function addTablet() {
+            let tabletName = document.getElementById("tabletName").value;
+            let time = document.getElementById("time").value;
+            let dosage = document.getElementById("dosage").value;
+
+            if (tabletName && time && dosage) {
+                let table = document.getElementById("tabletDisplay").getElementsByTagName('tbody')[0];
+                let newRow = table.insertRow(-1);
+                let rowNumber = table.rows.length;
+                newRow.innerHTML = `<td>${rowNumber}</td><td>${tabletName}</td><td>${time}</td><td>${dosage}</td><td><button onclick="deleteRow(this)">❌</button></td>`;
+            } else {
+                alert("Please enter Tablet Name, Time, and Dosage.");
+            }
+
+            // Clear input fields
+            document.getElementById("tabletName").value = "";
+            document.getElementById("time").value = "";
+            document.getElementById("dosage").value = "";
+        }
+
+        function deleteRow(btn) {
+            let row = btn.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+
+            // Update row numbers after deletion
+            let table = document.getElementById("tabletDisplay").getElementsByTagName('tbody')[0];
+            for (let i = 0; i < table.rows.length; i++) {
+                table.rows[i].cells[0].innerHTML = i + 1;
+            }
+        }
+
+        document.getElementById('patientForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the form from submitting the default way
+
+            let form = event.target;
+
+            let patientDetails = {
+                date: form.date.value,
+                patientName: form.patientName.value,
+                age: form.age.value,
+                gender: form.gender.value,
+                disease: form.disease.value,
+                description: form.description.value,
+                admitted: form.admitted.value,
+                tablets: []
+            };
+
+            let table = document.getElementById("tabletDisplay").getElementsByTagName('tbody')[0];
+            for (let i = 0; i < table.rows.length; i++) {
+                let row = table.rows[i];
+                patientDetails.tablets.push({
+                    tabletName: row.cells[1].innerText,
+                    time: row.cells[2].innerText,
+                    dosage: row.cells[3].innerText
+                });
+            }
+
+            // Retrieve existing patient details from local storage
+            let patientArray = JSON.parse(localStorage.getItem("patientDetails"));
+
+            console.log(patientArray)
+
+
+            patientArray.push(patientDetails);
+            localStorage.setItem('patientDetails', JSON.stringify(patientArray));
+
+            console.log("T1", patientArray);
+            alert("Patient details have been saved.");
+        });
+    </script>
+</body>
+</html>

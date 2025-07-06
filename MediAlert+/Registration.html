@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <title>
+        Registration
+    </title>
+    <style>
+        section {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        #home {
+            background:
+                url("indexbg.jpg");
+            background-size: cover;
+            background-position: center;
+            flex-direction: column;
+        }
+
+        .h1 {
+            font-family: serif;
+            color: rgb(0, 0, 0);
+            font-size: 5.5vw;
+            text-align: center;
+        }
+
+        .h2 {
+            font-family: cursive;
+            color: rgb(8, 8, 8);
+            font-size: 2.0vw;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .form {
+            font-family:cursive;
+            color: rgb(3, 3, 3);
+            font-size: 1.1vw;
+            font-weight:400;
+        }
+        .form1 {
+            height:500px;
+            width:800px;
+            background-color: rgba(112, 218, 188, 0.3);
+            
+            border-radius: 40px;
+            margin-left:200px;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+    <section id="home">
+        <div class="container">
+            <div class="nav">
+                <ul>
+                    <li><a href="#Contactus">Contact Us</a></li>
+                    <li><a href="Login.html">Login</a></li>
+                    <li><a href="#Register">Register</a></li>
+                    <li><a href="#Guide">Guide</a></li>
+                    <li><a href="index.html">Home</a></li>
+                    <li style="float:left;"><a class="active" href="#">MediAlert+</a></li>
+                  </ul>
+                    
+                </ul>
+            </div>
+            <hr>
+        <br>
+        <div class="form1">
+        <h2 class="h2">Register</h2>
+        <div class="grid grid-cols-8">
+            <div class="col-start-4 col-span-2">
+                <form id="registration-form">
+                    <div class="form">
+                        <br><label for="name">Name:</label>
+                        <input type="text" name="name" placeholder="Enter name"
+                            class="border border-gray-900 text-gray-1000 rounded p-2 w-full">
+                    </div>
+                    <div class="form">
+                        <br><label for="hname">Hospital Name:</label>
+                        <input type="text" name="hname" placeholder="Enter hospital name"
+                            class="border border-gray-900 text-gray-900 rounded p-2 w-full">
+                    </div>
+                    <div class="form">
+                        <br><label for="userId">User ID:</label>
+                        <input type="text" name="userId" placeholder="Enter user Id"
+                            class="border border-gray-900 text-gray-900 rounded p-2 w-full">
+                    </div>
+                    <div class="form">
+                        <br><label for="password">Set Password:</label>
+                        <input type="password" name="password" placeholder="password"
+                            class="border border-gray-900 text-gray-900 rounded p-2 w-full">
+                    </div>
+                    <div class="form">
+                        <br><button type="submit" class="bg-green-300 hover:bg-green-500 font-medium rounded px-5 py-2"
+                            style="color:rgb(12, 116, 212)">Submit
+                            </button>
+                    </div>
+                    <div class="form">
+                        
+                        <p class="py-2" style="color:rgb(4, 4, 4)"> Have an account? <a href="/Login.html"
+                                style="color:rgb(12, 116, 212)">Login
+                                now</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    </section>
+    <script>
+        document.getElementById("registration-form").addEventListener("submit", function (e) {
+            e.preventDefault();
+            const name = e.target.name.value;
+            const hname = e.target.hname.value;
+            const userId = e.target.userId.value;
+            const password = e.target.password.value;
+
+            const users = JSON.parse(localStorage.getItem("users")) || [];
+            users.push({ name, hname, userId, password });
+            localStorage.setItem("users", JSON.stringify(users));
+
+            alert("Registration successful!");
+            window.location.href = "Login.html";
+        });
+    </script>
+</body>
+
+</html>
